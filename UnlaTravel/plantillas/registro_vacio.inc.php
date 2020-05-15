@@ -31,6 +31,6 @@
     <input type="checkbox" name="checkbox[]" value="Recepcion24h">Recepcion 24 hs <br>
     <input type="checkbox" name="checkbox[]" value=Lavanderia">Servicio de lavanderia <br>
 </form>
-<div class="form-group">
+<div class="container">
     <button type="submit" class="btn btn-success btn-lg btn-block" name="enviar">Crear</button>
 </div>

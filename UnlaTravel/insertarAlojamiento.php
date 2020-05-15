@@ -10,9 +10,9 @@ include_once 'app/Redireccion.inc.php';
 if (isset($_POST['enviar'])) {
     Conexion :: abrir_conexion();
     $validador = new ValidadorAlojamiento($_POST['nombre'], $_POST['emailAlojamiento'], $_POST['cantidad'], Conexion :: getConexion());
-    
+    echo $validador->registroValidado();
     if ($validador->registroValidado()) {
-        
+        echo 'registrovalidado';
         
         $alojamiento = new Alojamiento('', $validador->getNombre(), $validador->getEmail(), $validador->getCantidadHabitaciones());
         

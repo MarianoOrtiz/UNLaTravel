@@ -16,7 +16,7 @@ class Alojamiento {
 
     /* Constructor */
 
-    public function __construct($id, $nombre, $categoria, $cantidadHabInd, $cantidadHabDob, $servicio, $tipoPension, $ciudad, $email, $regimen) {
+    public function __construct($id, $nombre, $categoria, $cantidadHabInd, $cantidadHabDob, $servicio, $ciudad, $email, $regimen) {
 
 
         $this->id = $id;
@@ -25,7 +25,7 @@ class Alojamiento {
         $this->cantidadHabInd = $cantidadHabInd;
         $this->cantidadHabDob = $cantidadHabDob;
         $this->servicio[] = $servicio;
-        $this->tipoPension = $tipoPension;
+        
         $this->ciudad = $ciudad;
         $this->email = $email;
         $this->regimen=$regimen;
@@ -51,13 +51,11 @@ class Alojamiento {
         return $this->cantidadHabDob;
     }
 
-    public function getSercicio() {
+    public function getServicio() {
         return $this->servicio;
     }
 
-    public function getTipoPension() {
-        return $this->tipoPension;
-    }
+   
 
     public function getCiudad() {
         return $this->ciudad;
@@ -95,9 +93,7 @@ class Alojamiento {
         $this->servicio[] = $servicio;
     }
 
-    public function setTipoPension($tipoPension) {
-        $this->tipoPension = $tipoPension;
-    }
+   
 
     public function setCiudad($ciudad) {
         $this->ciudad = $ciudad;

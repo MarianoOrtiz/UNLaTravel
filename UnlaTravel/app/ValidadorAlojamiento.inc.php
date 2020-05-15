@@ -17,37 +17,39 @@ class ValidadorAlojamiento {
     private $ciudad;
     private $email;
     private $regimen;
+    private $servicios=array();
     
     private $error_nombre;
     private $error_categoria;
     private $error_cantidadHabitacionesInd;
     private $error_cantidadHabitacionesDob;
-    private $error_tipoPension;
+
     private $error_ciudad;
     private $error_email;
     private $error_regimen;
 
     //  private $error_cantidad;
 
-    public function __construct($nombre, $categoria, $cantidadHabitacionesInd, $cantidadHabitacionesDob, $tipoPension, $ciudad, $email, $regimen, $conexion) {
+    public function __construct($nombre, $categoria, $cantidadHabitacionesInd, $cantidadHabitacionesDob,  $ciudad, $email, $regimen, $conexion, $servicios) {
         $this->aviso_inicio = "<br><div class='alert alert-danger' role='alert'>";
         $this->aviso_cierre = "</div>";
-
+        
         $this->nombre = "";
         $this->categoria = "";
         $this->cantidadHabitacionesInd = "";
         $this->cantidadHabitacionesDob = "";
-        $this->tipoPension = "";
+       
         $this->ciudad = "";
         $this->email = "";
         $this->regimen = "";
+        $this->servicios[] = $servicios;
 
         //Validan que se hayan ingresado valores en el Front, para que no llegue vacio a la BD y no genere error
         $this->error_nombre = $this->validarNombre($nombre);
         $this->error_categoria = $this->validarCategoria($categoria);
         $this->error_cantidadHabitacionesInd = $this->validarCantidadHabInd($cantidadHabitacionesInd);
         $this->error_cantidadHabitacionesDob = $this->validarCantidadHabDob($cantidadHabitacionesDob);
-        $this->error_tipoPension = $this->validarTipoPension($tipoPension);
+        
         $this->error_ciudad = $this->validarCiudad($ciudad);
         $this->error_email = $this->validarEmail($conexion, $email);
         $this->error_regimen = $this->validarRegimen($regimen);
@@ -55,14 +57,19 @@ class ValidadorAlojamiento {
 
     //Valida si la variable ingresada esta vacia o no
     private function variable_iniciada($variable) {
+       
         if (isset($variable) && !empty($variable)) {
+            
             return true;
         } else {
+           
             return false;
         }
     }
 
     private function validarNombre($nombre) {
+        
+        echo $this->variable_iniciada($nombre);
         if (!$this->variable_iniciada($nombre)) {
             return "Debes escribir un nombre de Alojamiento";
         } else {
@@ -110,15 +117,7 @@ class ValidadorAlojamiento {
         return "";
     }
 
-    private function validarTipoPension($tipoPension) {
-        if (!$this->variable_iniciada($tipoPension)) {
-            return "Debes ingresar un tipo de pension";
-        } else {
-            $this->tipoPension = $tipoPension;
-        }
-
-        return "";
-    }
+ 
 
     private function validarCiudad($ciudad) {
         if (!$this->variable_iniciada($ciudad)) {
@@ -171,9 +170,7 @@ class ValidadorAlojamiento {
         return $this->cantidadHabitacionesDob;
     }
 
-    public function getTipoPension() {
-        return $this->tipoPension;
-    }
+ 
 
     public function getCiudad() {
         return $this->ciudad;
@@ -187,6 +184,9 @@ class ValidadorAlojamiento {
         return $this->regimen;
     }
 
+    public function getServicios(){
+        return $this->servicios;
+    }
     //Getter errores
 
     public function getErrorNombre() {
@@ -205,9 +205,7 @@ class ValidadorAlojamiento {
         return $this->error_cantidadHabitacionesDob;
     }
 
-    public function getErrorTipoPension() {
-        return $this->error_tipoPension;
-    }
+  
 
     public function getErrorCiudad() {
         return $this->error_ciudad;
@@ -246,11 +244,7 @@ class ValidadorAlojamiento {
         }
     }
 
-    public function mostrarErrorTipoPension() {
-        if ($this->error_tipoPension !== "") {
-            echo $this->aviso_inicio . $this->error_tipoPension . $this->aviso_cierre;
-        }
-    }
+  
     
     public function mostrarErrorCiudad() {
         if ($this->error_ciudad !== "") {
@@ -323,7 +317,8 @@ class ValidadorAlojamiento {
   
     public function registroValidado() {
         $resultado = true;
-        
+   
+   
         if ($this->error_nombre === "") {
             $resultado = true;
         } else {
@@ -348,11 +343,7 @@ class ValidadorAlojamiento {
             $resultado = false;
         }
         
-        if ($this->error_tipoPension === "") {
-            $resultado = true;
-        } else {
-            $resultado = false;
-        }
+       
         
         if ($this->error_ciudad === "") {
             $resultado = true;

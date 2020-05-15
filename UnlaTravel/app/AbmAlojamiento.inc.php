@@ -37,14 +37,14 @@ class AbmAlojamiento {
         if (isset($conexion)) {
             try {
 
-                $sql = "INSERT INTO alojamiento(nombre,  categoria, cantidadHabInd, cantidadHabDob, servicio, tipoPension, ciudad, email, regimen) VALUES(:nombre, :categoria, :cantidadHabInd, :cantidadHabDob, :servicio, :tipoPension, :ciudad, :email, :regimen)";
+                $sql = "INSERT INTO alojamiento(nombre,  categoria, cantidadHabInd, cantidadHabDob,  ciudad, email, regimen) VALUES(:nombre, :categoria, :cantidadHabInd, :cantidadHabDob, :servicio,  :ciudad, :email, :regimen)";
 
                 $nombretmp = $alojamiento->getNombre();
                 $categoriatmp = $alojamiento->getCategoria();
                 $cantidadHabIndtmp = $alojamiento->getCantidadHabInd();
                 $cantidadHabDobtmp = $alojamiento->getCantidadHabDob();
                 $serviciotmp = $alojamiento->getServicio();
-                $tipoPensiontmp = $alojamiento->getTipoPension();
+              
                 $ciudadtmp = $alojamiento->getCiudad();
                 $emailtmp = $alojamiento->getEmail(); 
                 $regimentmp = $alojamiento->getRegimen();
@@ -55,12 +55,13 @@ class AbmAlojamiento {
                 $sentencia->bindParam(':categoria', $categoriatmp, PDO::PARAM_STR);
                 $sentencia->bindParam(':cantidadHabInd', $cantidadHabIndtmp, PDO::PARAM_STR);
                 $sentencia->bindParam(':cantidadHabDob', $cantidadHabDobtmp, PDO::PARAM_STR);
-                $sentencia->bindParam(':servicio', $serviciotmp, PDO::PARAM_STR);
-                $sentencia->bindParam(':tipoPension', $tipoPensiontmp, PDO::PARAM_STR);
+                
+               
                 $sentencia->bindParam(':ciudad', $ciudadtmp, PDO::PARAM_STR);
                 $sentencia->bindParam(':email', $emailtmp, PDO::PARAM_STR);
                 $sentencia->bindParam(':regimen', $regimentmp, PDO::PARAM_STR);
                 
+                //insertar servicios y alojamientos en tabla intermedia
 
                 $alojamiento_insertado = $sentencia->execute();
             } catch (PDOException $ex) {

@@ -5,9 +5,9 @@ include_once 'app/RepositorioUsuario.inc.php';
 include_once 'app/ValidadorPassword.inc.php';
 include_once 'app/Redireccion.inc.php';
 
-if (isset($_POST['enviar'])) {
+if (isset(filter_input(INPUT_POST, 'enviar'))) {
     Conexion :: abrir_conexion();
-    $validador = new ValidadorPassword($_POST['nombre'], $_POST['apellido'], $_POST['email'], $_POST['password'], $_POST['confirm_password'], Conexion :: getConexion());
+    $validador = new ValidadorPassword(filter_input(INPUT_POST, 'nombre'), $_POST['apellido'], $_POST['email'], $_POST['password'], $_POST['confirm_password'], Conexion :: getConexion());
 
     if ($validador->registroValidado()) {
         $usuario = new Usuario('', $validador->getNombre(), $validador->getApellido(), '', $validador->getClave(), $validador->getEmail());

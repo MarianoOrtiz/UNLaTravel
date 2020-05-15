@@ -43,7 +43,7 @@
 /*Imagen de fondo*/
 
 body{
-    background-image: url('../imagenes');
+    background-image: url('../images');
 }
 
 .jumbotron{
