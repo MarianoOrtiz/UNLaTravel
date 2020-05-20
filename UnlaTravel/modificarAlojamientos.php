@@ -1,3 +1,4 @@
+
 <?php
 //FRONT PARA INSERTAR UN ALOJAMIENTO A LA BD
 
@@ -9,9 +10,11 @@ include_once 'app/Redireccion.inc.php';
 include_once 'app/RepositorioCiudad.inc.php';
 include_once 'app/Ciudad.inc.php';
 
+$idAlojamiento = ($_GET['id']);
+Conexion :: abrir_conexion();
+$alojamiento = AbmAlojamiento :: getAlojamientoPorId2(Conexion::getConexion(), $idAlojamiento);
 
-
-if (isset($_POST['enviar'])) {
+if (isset($_POST['actualizar'])) {
 
     Conexion :: abrir_conexion();
     $servicios = filter_input(INPUT_POST, 'checkbox');
@@ -19,26 +22,28 @@ if (isset($_POST['enviar'])) {
 
     $validador = new ValidadorAlojamiento($_POST['nombre'], $_POST['categoria'], $_POST['cantidadHabitacionesInd'], $_POST['cantidadHabitacionesDob'], $_POST['ciudad'], $_POST['email'], $_POST['regimen'], Conexion :: getConexion(), $servicios);
 
-    if ($validador->alojamientoValidado()) {
+    if ($validador->validarActualizacion()) {
 
-         $alojamiento = new Alojamiento('', $validador->getNombre(), $validador->getCategoria(), $validador->getCantidadHabitacionesInd(), $validador->getCantidadHabitacionesDob(), $validador->getServicios(), $validador->getCiudad(), $validador->getEmail(), $validador->getRegimen());
+        $alojamiento = new Alojamiento($_POST['idAlojamiento'], $validador->getNombre(), $validador->getCategoria(), $validador->getCantidadHabitacionesInd(), $validador->getCantidadHabitacionesDob(), $validador->getServicios(), $validador->getCiudad(), $validador->getEmail(), $validador->getRegimen());
 
-        $alojamiento_insertado = AbmAlojamiento :: insertarAlojamiento(Conexion :: getConexion(), $alojamiento, $_POST['checkbox']);
+        $alojamiento_modificado = AbmAlojamiento :: modificarAlojamiento(Conexion :: getConexion(), $alojamiento, $_POST['checkbox']);
+        $idAlojamiento = $alojamiento->getId();
 
-        
-        
-        if ($alojamiento_insertado) {
-            // Redireccion :: redirigir(RUTA_REGISTRO_CORRECTO . '?nombre=' . $alojamiento -> getNombreAlojamiento());
+
+        if ($alojamiento_modificado) {
+
+            header("Location: listaAlojamientos.php");
         }
     }
     Conexion :: cerrar_conexion();
 }
-Conexion :: abrir_conexion();
+
+//Mostrar datos
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>UNLaTravel - Ingresar nuevo alojamiento</title>
+        <title>UNLaTravel - Modificar Alojamiento</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--===============================================================================================-->	
@@ -62,20 +67,21 @@ Conexion :: abrir_conexion();
         <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="css/util.css">
         <link rel="stylesheet" type="text/css" href="css/main.css">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link href="css/blog.css" rel="stylesheet">
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        <!--===============================================================================================-->
         <style type="text/css">
             body{
                 color: #fff;
                 background: #0000;
                 font-family: 'Roboto', sans-serif;
-                
+               
                 background-position: center;
-                 background-repeat: no-repeat, repeat;
-                 background-size: cover;
-                
+                background-repeat: no-repeat, repeat;
+                background-size: cover;
+
             }
             .form-control{
                 height: 40px;
@@ -160,56 +166,102 @@ Conexion :: abrir_conexion();
                 text-decoration: underline;
             }  
         </style>
+        
     </head>
 
     <body>
         
         <div class="container">
-            <?php include_once 'plantillas/navbar-Administrador.inc.php';?>
-        
-        
-     
+         <?php include_once 'plantillas/navbar-Administrador.inc.php'; ?>
+
             <div class="signup-form">
                 <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-                    <?php
-                    if (isset($_POST['enviar'])) {
-                        include_once 'plantillas/insertarAlojamiento_validado.inc.php';
-                    } else {
-                        include_once 'plantillas/insertarAlojamiento_vacio.inc.php';
-                    }
-                    ?>
+                    <input type="hidden" name="idAlojamiento" value="<?php echo $alojamiento->getID(); ?>">
+                    
+                    <h2>Modificar Alojamiento</h2><br>
+
+
+
+                    <div class="form-group">
+                        <label>Nombre de Alojamiento</label>
+                        <input type="text"    name="nombre"  value="<?php echo $alojamiento->getNombre(); ?>" required="required" > 
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Categoria</label>
+                        <select name="categoria">
+                            <option value="1">1 estrella</option> 
+                            <option value="2">2 estrellas</option> 
+                            <option value="3">3 estrellas</option>
+                            <option value="4">4 estrellas</option> 
+                            <option value="5">5 estrellas</option> 
+                        </select> 
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cantidadhabind">Cantidad de habitaciones individuales</label>
+                        <input type="text"  id="nombreALojamiento" name="cantidadHabitacionesInd" aria-describedby="emailHelp" value="<?php echo $alojamiento->getCantidadHabInd(); ?>" >
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cantidadhabind">Cantidad de habitaciones Dobles</label>
+                        <input type="text"  id="nombreALojamiento" name="cantidadHabitacionesDob" aria-describedby="emailHelp" value="<?php echo $alojamiento->getCantidadHabDob(); ?>" > 
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoPension">Regimen</label>
+                        <select name="regimen">
+                            <option value="1">Media Pension</option> 
+                            <option value="2">Pension completa</option> 
+                            <option value="3">Solo hospedaje</option>
+                        </select> 
+                    </div>
+
+                    <div class="form-group">
+                        <label for="otro">Ciudad</label>
+                        <select name="ciudad">
+                            <?php RepositorioCiudad::escribirCiudades2(Conexion :: getConexion(), $alojamiento->getCiudad()); ?>
+                        </select> 
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cantidadhabind">E-mail</label>
+                        <input type="text"  id="nombreALojamiento" name="email" aria-describedby="emailHelp" value="<?php echo $alojamiento->getEmail(); ?>" > 
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cantidadhabind">Servicios</label>
+                        <div>
+                            <input type="checkbox" name="checkbox[]" value="1">Aire Acondicionado<br>
+                            <input type="checkbox" name="checkbox[]" value="2">Wi-fi gratis<br>
+                            <input type="checkbox" name="checkbox[]" value="3">Calefaccion<br>
+                            <input type="checkbox" name="checkbox[]" value="4">Ascensor<br>
+                            <input type="checkbox" name="checkbox[]" value="5">Recepcion 24 hs<br>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button id="btnActualizar" type="submit" class="btn btn-success btn-lg btn-block" name="actualizar">Modificar Alojamiento</button>
+                    </div>
+
 
                 </form>
             </div>
-              
+
         </div>
 
 
 
 
-        <!--===============================================================================================-->
-        <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="vendor/animsition/js/animsition.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="vendor/bootstrap/js/popper.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="vendor/select2/select2.min.js"></script>
-        <script>
-            $(".selection-2").select2({
-                minimumResultsForSearch: 20,
-                dropdownParent: $('#dropDownSelect1')
-            });
-        </script>
-        <!--===============================================================================================-->
-        <script src="vendor/daterangepicker/moment.min.js"></script>
-        <script src="vendor/daterangepicker/daterangepicker.js"></script>
-        <!--===============================================================================================-->
-        <script src="vendor/countdowntime/countdowntime.js"></script>
-        <!--===============================================================================================-->
-        <script src="js/main.js"></script>
-
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
     </body>
 <?php Conexion :: cerrar_conexion(); ?>
 </html>

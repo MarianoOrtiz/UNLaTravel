@@ -8,7 +8,6 @@ class ValidadorAlojamiento {
 
     private $aviso_inicio;
     private $aviso_cierre;
-    
     private $nombre;
     private $categoria;
     private $cantidadHabitacionesInd;
@@ -17,39 +16,38 @@ class ValidadorAlojamiento {
     private $ciudad;
     private $email;
     private $regimen;
-    private $servicios=array();
-    
+    private $servicios = array();
     private $error_nombre;
     private $error_categoria;
     private $error_cantidadHabitacionesInd;
     private $error_cantidadHabitacionesDob;
-
     private $error_ciudad;
     private $error_email;
     private $error_regimen;
+   // private $error_servicios;
 
     //  private $error_cantidad;
 
-    public function __construct($nombre, $categoria, $cantidadHabitacionesInd, $cantidadHabitacionesDob,  $ciudad, $email, $regimen, $conexion, $servicios) {
+    public function __construct($nombre, $categoria, $cantidadHabitacionesInd, $cantidadHabitacionesDob, $ciudad, $email, $regimen, $conexion, $servicios) {
         $this->aviso_inicio = "<br><div class='alert alert-danger' role='alert'>";
         $this->aviso_cierre = "</div>";
-        
+
         $this->nombre = "";
         $this->categoria = "";
         $this->cantidadHabitacionesInd = "";
         $this->cantidadHabitacionesDob = "";
-       
+
         $this->ciudad = "";
         $this->email = "";
         $this->regimen = "";
         $this->servicios[] = $servicios;
-
+        
         //Validan que se hayan ingresado valores en el Front, para que no llegue vacio a la BD y no genere error
         $this->error_nombre = $this->validarNombre($nombre);
         $this->error_categoria = $this->validarCategoria($categoria);
         $this->error_cantidadHabitacionesInd = $this->validarCantidadHabInd($cantidadHabitacionesInd);
         $this->error_cantidadHabitacionesDob = $this->validarCantidadHabDob($cantidadHabitacionesDob);
-        
+       // $this->error_servicios = $this->validarServicios($servicios);
         $this->error_ciudad = $this->validarCiudad($ciudad);
         $this->error_email = $this->validarEmail($conexion, $email);
         $this->error_regimen = $this->validarRegimen($regimen);
@@ -57,19 +55,19 @@ class ValidadorAlojamiento {
 
     //Valida si la variable ingresada esta vacia o no
     private function variable_iniciada($variable) {
-       
+
         if (isset($variable) && !empty($variable)) {
-            
+
             return true;
         } else {
-           
+
             return false;
         }
     }
 
     private function validarNombre($nombre) {
-        
-        echo $this->variable_iniciada($nombre);
+
+
         if (!$this->variable_iniciada($nombre)) {
             return "Debes escribir un nombre de Alojamiento";
         } else {
@@ -117,8 +115,6 @@ class ValidadorAlojamiento {
         return "";
     }
 
- 
-
     private function validarCiudad($ciudad) {
         if (!$this->variable_iniciada($ciudad)) {
             return "Debes ingresar una Ciudad";
@@ -142,6 +138,14 @@ class ValidadorAlojamiento {
 
         return "";
     }
+    
+   /* private function validarServicios($servicios){
+        if(!$this->variable_iniciada($servicios) ){
+            return "Debes seleccionar al menos un servicio";
+        }else{
+            $this->servicios[] = $servicios;
+        }
+    }*/
 
     private function validarRegimen($regimen) {
         if (!$this->variable_iniciada($regimen)) {
@@ -170,8 +174,6 @@ class ValidadorAlojamiento {
         return $this->cantidadHabitacionesDob;
     }
 
- 
-
     public function getCiudad() {
         return $this->ciudad;
     }
@@ -184,9 +186,10 @@ class ValidadorAlojamiento {
         return $this->regimen;
     }
 
-    public function getServicios(){
+    public function getServicios() {
         return $this->servicios;
     }
+
     //Getter errores
 
     public function getErrorNombre() {
@@ -205,8 +208,6 @@ class ValidadorAlojamiento {
         return $this->error_cantidadHabitacionesDob;
     }
 
-  
-
     public function getErrorCiudad() {
         return $this->error_ciudad;
     }
@@ -218,6 +219,10 @@ class ValidadorAlojamiento {
     public function getErrorRegimen() {
         return $this->error_regimen;
     }
+    
+   /* public function getErrorServicios(){
+        return $this->error_servicios;
+    }*/
 
     //Muestra de errores
     public function mostrarErrorNombre() {
@@ -239,53 +244,57 @@ class ValidadorAlojamiento {
     }
 
     public function mostrarErrorCantHabDob() {
-        if ($this->error_cantidadHabitacioneDob !== "") {
+        if ($this->error_cantidadHabitacionesDob !== "") {
             echo $this->aviso_inicio . $this->error_cantidadHabitacionesDob . $this->aviso_cierre;
         }
     }
 
-  
-    
     public function mostrarErrorCiudad() {
         if ($this->error_ciudad !== "") {
             echo $this->aviso_inicio . $this->error_ciudad . $this->aviso_cierre;
         }
     }
-    
+
     public function mostrarErrorEmail() {
         if ($this->error_email !== "") {
             echo $this->aviso_inicio . $this->error_email . $this->aviso_cierre;
         }
     }
-    
+
     public function mostrarErrorRegimen() {
         if ($this->error_regimen !== "") {
             echo $this->aviso_inicio . $this->error_regimen . $this->aviso_cierre;
         }
     }
     
+    /*public function mostrarErrorServicios() {
+        if ($this->error_servicios !== "") {
+            echo $this->aviso_inicio . $this->error_servicios . $this->aviso_cierre;
+        }
+    }*/
+
     //Muestra las variables en los Front 
     public function mostrarNombre() {
         if ($this->nombre !== "") {
             echo 'value="' . $this->nombre . '"';
         }
     }
-    
+
     public function mostrarCategoria() {
         if ($this->categoria !== "") {
             echo 'value="' . $this->categoria . '"';
         }
     }
-    
+
     public function mostrarCantHabInd() {
         if ($this->cantidadHabitacionesInd !== "") {
             echo 'value="' . $this->cantidadHabitacionesInd . '"';
         }
     }
-    
+
     public function mostrarCantHabDob() {
-        if ($this->cantidadHabitacionesDob!== "") {
-            echo 'value="' . $this->cantidadHabitacionesDob. '"';
+        if ($this->cantidadHabitacionesDob !== "") {
+            echo 'value="' . $this->cantidadHabitacionesDob . '"';
         }
     }
 
@@ -294,80 +303,66 @@ class ValidadorAlojamiento {
             echo 'value="' . $this->tipoPension . '"';
         }
     }
-    
+
     public function mostrarCiudad() {
         if ($this->ciudad !== "") {
             echo 'value="' . $this->ciudad . '"';
         }
     }
-    
+
     public function mostrarEmail() {
         if ($this->email !== "") {
             echo 'value="' . $this->email . '"';
         }
     }
-    
+
     public function mostrarRegimen() {
         if ($this->regimen !== "") {
             echo 'value="' . $this->regimen . '"';
         }
     }
-    
+
     //Valida que todo estee correctamente ingresado
-  
-    public function registroValidado() {
+
+    public function alojamientoValidado() {
         $resultado = true;
-   
-   
-        if ($this->error_nombre === "") {
+        
+        if ($this->error_nombre === "" &&
+            $this->error_categoria === "" &&
+            $this->error_cantidadHabitacionesInd === "" &&
+            $this->error_cantidadHabitacionesDob === "" &&
+            $this->error_ciudad === "" &&
+            $this->error_regimen === ""&&
+            $this->error_email === "" /*&&
+            //$this->error_servicios === ""    */
+                
+            ) {
+            
             $resultado = true;
         } else {
             $resultado = false;
         }
         
-        if ($this->error_categoria === "") {
-            $resultado = true;
-        } else {
-            $resultado = false;
-        }
-        
-        if ($this->error_cantidadHabitacionesInd === "") {
-            $resultado = true;
-        } else {
-            $resultado = false;
-        }
-        
-        if ($this->error_cantidadHabitacionesDob === "") {
-            $resultado = true;
-        } else {
-            $resultado = false;
-        }
-        
-       
-        
-        if ($this->error_ciudad === "") {
-            $resultado = true;
-        } else {
-            $resultado = false;
-        }
-        
-
-        if ($this->error_email === "") {
-            $resultado = true;
-        } else {
-            $resultado = false;
-        }
-        
-        if ($this->error_regimen === "") {
-            $resultado = true;
-        } else {
-            $resultado = false;
-        }
-
-       
         return $resultado;
     }
-
     
+     public function validarActualizacion() {
+        $resultado = true;
+        
+        if ($this->error_nombre === "" &&
+            $this->error_categoria === "" &&
+            $this->error_cantidadHabitacionesInd === "" &&
+            $this->error_cantidadHabitacionesDob === "" &&
+            $this->error_ciudad === "" &&
+            $this->error_regimen === ""
+            ) {
+            
+            $resultado = true;
+        } else {
+            $resultado = false;
+        }
+        
+        return $resultado;
+    }
 
 }

@@ -1,33 +1,35 @@
 <?php
+include_once 'app/Conexion.inc.php';
 
 class Ciudad {
 
-    private $id;
+    private $idCiudad;
     private $nombreCiudad;
 
     /* Constructor */
 
-    public function __construct($id, $nombreCiudad) {
-
-        $this->id = $id;
-        $this->nombrCiudad = $nombreCiudad;
+    public function __construct($idCiudad, $nombreCiudad) {
+            
+        $this->idCiudad = $idCiudad;
+        $this->nombreCiudad = $nombreCiudad;
 
     }
 
-    public function getId() {
-        return $this->id;
+    public function getIdCiudad() {
+        return $this->idCiudad;
     }
     
-    public function getNombreCiudada(){
+    public function getNombreCiudad(){
         return $this->nombreCiudad;
     }
     
-    public function setId($id){
-        $this->id = $id;
+    public function setIdCiudad($id){
+        $this->idCiudad = $id;
     }
     
     public function setNombreCiudad($nombreCiudad){
         $this->nombreCiudad = $nombreCiudad;
     }
     
+  
 }
