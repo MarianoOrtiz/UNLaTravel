@@ -16,7 +16,7 @@ class ValidadorLogin{
         }else{
             $this -> usuario = RepositorioUsuario :: getUsuarioPorEmail($conexion, $email);
             
-            if(is_null($this -> usuario) || ($clave !== $this -> usuario -> getPassword())){
+            if(is_null($this -> usuario) || ($clave !== $this -> usuario -> getContrasena())){
                 $this -> error = "Datos incorrectos";
             }
         }
