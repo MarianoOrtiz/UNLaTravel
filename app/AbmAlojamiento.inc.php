@@ -39,20 +39,20 @@ class AbmAlojamiento {
             try {
                 include_once 'Alojamiento.inc.php';
 
-                $sql = "SELECT a.idAlojamiento, a.nombre, a.categoria, a.cantidadHabInd, a.cantidadHabDob, a.regimen, a.email, c.nombreCiudad
+                $sql = "SELECT a.idAlojamiento, a.nombre, a.categoria, a.cantidadHabInd, a.cantidadHabDob, a.regimen, a.email, c.nombreCiudad, a.precio
 FROM alojamiento a
 JOIN ciudad c
 ON a.Ciudad_idCiudad = c.idCiudad;";
-                
+
                 $sentencia = $conexion->prepare($sql);
                 $sentencia->execute();
                 $resultado = $sentencia->fetchAll();
 
                 if (count($resultado)) {
                     foreach ($resultado as $fila) {
-                        
+
                         $alojamientos[] = new Alojamiento(
-                                $fila['idAlojamiento'], $fila['nombre'], $fila['categoria'], $fila['cantidadHabInd'], $fila['cantidadHabDob'], "", $fila['nombreCiudad'], $fila['email'], $fila['regimen']);
+                                $fila['idAlojamiento'], $fila['nombre'], $fila['categoria'], $fila['cantidadHabInd'], $fila['cantidadHabDob'], "", $fila['nombreCiudad'], $fila['email'], $fila['regimen'], $fila['precio']);
                     }
                 } else {
                     print "La tabla Alojamientos esta vacía";
@@ -70,13 +70,14 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
         if (isset($conexion)) {
             try {
 
-                $sql = "INSERT INTO alojamiento(nombre,  categoria, cantidadHabInd, cantidadHabDob,  Ciudad_idCiudad, email, regimen) VALUES(:nombre, :categoria, :cantidadHabInd, :cantidadHabDob, :ciudad, :email, :regimen)";
+                $sql = "INSERT INTO alojamiento(nombre,  categoria, cantidadHabInd, cantidadHabDob,  Ciudad_idCiudad, email, regimen, precio) VALUES(:nombre, :categoria, :cantidadHabInd, :cantidadHabDob, :ciudad, :email, :regimen, :precio)";
 
                 $nombretmp = $alojamiento->getNombre();
                 $categoriatmp = $alojamiento->getCategoria();
                 $cantidadHabIndtmp = $alojamiento->getCantidadHabInd();
                 $cantidadHabDobtmp = $alojamiento->getCantidadHabDob();
                 $serviciotmp = $alojamiento->getServicio();
+                $preciotmp = $alojamiento->getprecio();
 
 
 
@@ -93,6 +94,7 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
                 $sentencia->bindParam(':ciudad', $ciudadtmp, PDO::PARAM_STR);
                 $sentencia->bindParam(':email', $emailtmp, PDO::PARAM_STR);
                 $sentencia->bindParam(':regimen', $regimentmp, PDO::PARAM_STR);
+                $sentencia->bindParam(':precio', $preciotmp, PDO::PARAM_STR);
 
                 //insertar servicios y alojamientos en tabla intermedia
                 $alojamiento_insertado = $sentencia->execute();
@@ -175,7 +177,7 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
 
                 include_once 'Alojamiento.inc.php';
 
-                $sql = "SELECT a.idAlojamiento, a.nombre, a.categoria, a.cantidadHabInd, a.cantidadHabDob, a.regimen, a.email, c.nombreCiudad
+                $sql = "SELECT a.idAlojamiento, a.nombre, a.categoria, a.cantidadHabInd, a.cantidadHabDob, a.regimen, a.email, c.nombreCiudad, a.precio
                         FROM alojamiento a
                         JOIN ciudad c
                         ON a.Ciudad_idCiudad = c.idCiudad
@@ -192,7 +194,7 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
                 if (!empty($resultado)) {
 
                     $alojamiento = new Alojamiento(
-                            $resultado['idAlojamiento'], $resultado['nombre'], $resultado['categoria'], $resultado['cantidadHabInd'], $resultado['cantidadHabDob'], "", $resultado['nombreCiudad'], $resultado['email'], $resultado['regimen']);
+                            $resultado['idAlojamiento'], $resultado['nombre'], $resultado['categoria'], $resultado['cantidadHabInd'], $resultado['cantidadHabDob'], "", $resultado['nombreCiudad'], $resultado['email'], $resultado['regimen'], $resultado['precio']);
                 }
             } catch (PDOException $ex) {
                 print 'ERROR' . $ex->getMessage();
@@ -271,7 +273,7 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
 
         if (isset($conexion)) {
             try {
-                $sql = "UPDATE alojamiento SET nombre = :nombre, categoria = :categoria, cantidadHabInd = :cantidadHabInd, cantidadHabDob = :cantidadHabDob,  Ciudad_idCiudad = :ciudad , email = :email, regimen = :regimen  WHERE (idAlojamiento = :idAlojamiento)";
+                $sql = "UPDATE alojamiento SET nombre = :nombre, categoria = :categoria, cantidadHabInd = :cantidadHabInd, cantidadHabDob = :cantidadHabDob,  Ciudad_idCiudad = :ciudad , email = :email, regimen = :regimen, precio = :precio WHERE (idAlojamiento = :idAlojamiento)";
 
                 $nombretmp = $alojamiento->getNombre();
 
@@ -282,8 +284,9 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
 
                 $ciudadtmp = $alojamiento->getCiudad();
                 $emailtmp = $alojamiento->getEmail();
-                $regimentmp = $alojamiento->getRegimen();
-
+                $regimentmp = $alojamiento->getRegimen();   
+                $preciotmp = $alojamiento->getPrecio();
+                
                 $sentencia = $conexion->prepare($sql);
 
                 $sentencia->bindParam(':idAlojamiento', $idAlojamientotmp, PDO::PARAM_STR);
@@ -294,7 +297,7 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
                 $sentencia->bindParam(':ciudad', $ciudadtmp, PDO::PARAM_STR);
                 $sentencia->bindParam(':email', $emailtmp, PDO::PARAM_STR);
                 $sentencia->bindParam(':regimen', $regimentmp, PDO::PARAM_STR);
-
+                $sentencia->bindParam(':precio', $preciotmp, PDO::PARAM_STR);
                 //insertar servicios y alojamientos en tabla intermedia
                 $alojamiento_insertado = $sentencia->execute();
 
@@ -345,9 +348,9 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
     }
 
     public static function escribirAlojamientos($conexion) {
-        
+
         $alojamientos = self::getAlojamientos2($conexion);
-        
+
         if (count($alojamientos)) {
             foreach ($alojamientos as $alojamiento) {
 
@@ -361,22 +364,23 @@ ON a.Ciudad_idCiudad = c.idCiudad;";
             return;
         }
         ?>
-        
+
         <div class="col-md-4">
             <div class="card mb-4 box-shadow">
                 <img class="card-img-top" src="images/hoteles/hotel1.jpg" alt="Card image cap">
                 <div class="card-body">
-                    <p class="card-text">Hotel: <?php echo $alojamiento -> getNombre(); ?></p>
-                    <p class="card-text">Categoria: <?php echo $alojamiento -> getCategoria(); ?></p>
-                    <p class="card-text">Ciudad: <?php echo $alojamiento -> getCiudad(); ?></p>
+                    <p class="card-text">Hotel: <?php echo $alojamiento->getNombre(); ?></p>
+                    <p class="card-text">Categoria: <?php echo $alojamiento->getCategoria(); ?></p>
+                    <p class="card-text">Ciudad: <?php echo $alojamiento->getCiudad(); ?></p>
+                    <p class="card-text">Precio: $ <?php echo $alojamiento->getPrecio(); ?></p>
                     <p class="card-text">Paga en cuotas</p>
-                    
+
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Ver</button>
+                            <a href="vistaALojamiento.php?idAlojamiento=<?php echo $alojamiento ->getId();?>" class="btn btn-success">Ver</a>
 
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

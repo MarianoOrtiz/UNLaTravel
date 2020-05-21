@@ -16,6 +16,7 @@ class ValidadorAlojamiento {
     private $ciudad;
     private $email;
     private $regimen;
+    private $precio;
     private $servicios = array();
     private $error_nombre;
     private $error_categoria;
@@ -24,11 +25,12 @@ class ValidadorAlojamiento {
     private $error_ciudad;
     private $error_email;
     private $error_regimen;
+    private $error_precio;
    // private $error_servicios;
 
     //  private $error_cantidad;
 
-    public function __construct($nombre, $categoria, $cantidadHabitacionesInd, $cantidadHabitacionesDob, $ciudad, $email, $regimen, $conexion, $servicios) {
+    public function __construct($nombre, $categoria, $cantidadHabitacionesInd, $cantidadHabitacionesDob, $ciudad, $email, $regimen, $conexion, $servicios, $precio) {
         $this->aviso_inicio = "<br><div class='alert alert-danger' role='alert'>";
         $this->aviso_cierre = "</div>";
 
@@ -41,6 +43,7 @@ class ValidadorAlojamiento {
         $this->email = "";
         $this->regimen = "";
         $this->servicios[] = $servicios;
+        $this->precio = "";
         
         //Validan que se hayan ingresado valores en el Front, para que no llegue vacio a la BD y no genere error
         $this->error_nombre = $this->validarNombre($nombre);
@@ -51,6 +54,7 @@ class ValidadorAlojamiento {
         $this->error_ciudad = $this->validarCiudad($ciudad);
         $this->error_email = $this->validarEmail($conexion, $email);
         $this->error_regimen = $this->validarRegimen($regimen);
+        $this->error_precio = $this->validarPrecio($precio);
     }
 
     //Valida si la variable ingresada esta vacia o no
@@ -156,6 +160,16 @@ class ValidadorAlojamiento {
 
         return "";
     }
+    
+    private function validarPrecio($precio) {
+        if (!$this->variable_iniciada($precio)) {
+            return "Debes ingresar un precio";
+        } else {
+            $this->precio = $precio;
+        }
+
+        return "";
+    }
 
     //Getters variables
     public function getNombre() {
@@ -189,6 +203,10 @@ class ValidadorAlojamiento {
     public function getServicios() {
         return $this->servicios;
     }
+    
+    public function getPrecio(){
+        return $this->precio;
+    }
 
     //Getter errores
 
@@ -220,9 +238,9 @@ class ValidadorAlojamiento {
         return $this->error_regimen;
     }
     
-   /* public function getErrorServicios(){
-        return $this->error_servicios;
-    }*/
+   public function getErrorPrecio(){
+        return $this->error_precio;
+    }
 
     //Muestra de errores
     public function mostrarErrorNombre() {
@@ -267,11 +285,11 @@ class ValidadorAlojamiento {
         }
     }
     
-    /*public function mostrarErrorServicios() {
-        if ($this->error_servicios !== "") {
-            echo $this->aviso_inicio . $this->error_servicios . $this->aviso_cierre;
+    public function mostrarErrorPrecio() {
+        if ($this->error_precio !== "") {
+            echo $this->aviso_inicio . $this->error_precio . $this->aviso_cierre;
         }
-    }*/
+    }
 
     //Muestra las variables en los Front 
     public function mostrarNombre() {
@@ -321,6 +339,12 @@ class ValidadorAlojamiento {
             echo 'value="' . $this->regimen . '"';
         }
     }
+    
+    public function mostrarPrecio() {
+        if ($this->precio !== "") {
+            echo 'value="' . $this->precio . '"';
+        }
+    }
 
     //Valida que todo estee correctamente ingresado
 
@@ -333,7 +357,8 @@ class ValidadorAlojamiento {
             $this->error_cantidadHabitacionesDob === "" &&
             $this->error_ciudad === "" &&
             $this->error_regimen === ""&&
-            $this->error_email === "" /*&&
+            $this->error_email === "" &&
+            $this->error_precio === ""/*&&
             //$this->error_servicios === ""    */
                 
             ) {

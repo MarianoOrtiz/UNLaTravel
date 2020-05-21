@@ -9,6 +9,10 @@ include_once 'app/RepositorioCiudad.inc.php';
 include_once 'app/Ciudad.inc.php';
 Conexion::abrir_Conexion();
 $conexion = Conexion::getConexion();
+
+if(isset($_POST['ver'])){
+   header("Location: vistaAlojamiento.php");
+}
 ?>
 <html lang="en">
     <head>

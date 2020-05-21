@@ -21,7 +21,7 @@ class Servicio {
     }
     
     public function getNombreServicio(){
-        return $this->nombreCiudad;
+        return $this->nombreServicio;
     }
     
     public function setIdServicio($id){

@@ -13,10 +13,11 @@ class Alojamiento {
     private $ciudad;
     private $email;
     private $regimen;
+    private $precio;
 
     /* Constructor */
 
-    public function __construct($id, $nombre, $categoria, $cantidadHabInd, $cantidadHabDob, $servicio, $ciudad, $email, $regimen) {
+    public function __construct($id, $nombre, $categoria, $cantidadHabInd, $cantidadHabDob, $servicio, $ciudad, $email, $regimen, $precio) {
 
 
         $this->id = $id;
@@ -29,12 +30,12 @@ class Alojamiento {
         $this->ciudad = $ciudad;
         $this->email = $email;
         $this->regimen=$regimen;
+        $this-> precio = $precio;
     }
 
     public function getId() {
         return $this->id;
     }
-
     public function getNombre() {
         return $this->nombre;
     }
@@ -67,6 +68,10 @@ class Alojamiento {
     
     public function getRegimen(){
         return $this->regimen;
+    }
+    
+    public function getPrecio(){
+        return $this->precio;
     }
 
     public function setId($id) {
@@ -105,6 +110,10 @@ class Alojamiento {
     
     public function setRegimen($regimen){
         $this->regimen = $regimen;
+    }
+    
+    public function setPrecio($precio){
+        $this->precio = $precio;
     }
 
 }
